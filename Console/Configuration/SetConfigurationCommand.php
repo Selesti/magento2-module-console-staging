@@ -2,6 +2,7 @@
 namespace Shockwavemk\Staging\Console\Configuration;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -15,7 +16,10 @@ use \Magento\Store\Model\StoreManager;
  */
 class SetConfigurationCommand extends Command
 {
-    const COMMAND_NAME = 'config:set';
+    const COMMAND_NAME = 'staging:config:set';
+    const DB_CONFIG_FILE_PATH_ARGUMENT_NAME = 'db-config-file-path';
+
+    protected $configResource;
 
     /**
      * Constructor
@@ -23,26 +27,24 @@ class SetConfigurationCommand extends Command
      */
     public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
-        $params = $_SERVER;
-        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
-        $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $objectManager = $objectManagerFactory->create($params);
-
-        /** @var \Magento\Config\Model\Resource\Config $test */
-        $test = $objectManager->get('Magento\Config\Model\Resource\Config');
-
-        $path = 'web/unsecure/base_url';
-        $value = 'http://example.url';
-        $scope = 'default';
-        $scopeId = '0';
-
-        $test->saveConfig(
-            $path,
-            $value,
-            $scope,
-            $scopeId
-        );
+        $this->configResource = $this->getConfigResource($objectManagerFactory);
         parent::__construct();
+    }
+
+    private function getConfigResource(ObjectManagerFactory $objectManagerFactory)
+    {
+        try {
+            $params = $_SERVER;
+            $params[StoreManager::PARAM_RUN_CODE] = 'admin';
+            $params[StoreManager::PARAM_RUN_TYPE] = 'store';
+            $objectManager = $objectManagerFactory->create($params);
+
+            /** @var \Magento\Config\Model\Resource\Config $test */
+            return $objectManager->get('Magento\Config\Model\Resource\Config');
+        }
+        catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -51,8 +53,18 @@ class SetConfigurationCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Set the defined config values')
-            ->setHelp('The <info>' . self::COMMAND_NAME . '</info> returns the current environment name.');
+            ->setDescription('Set the defined config values in database')
+            ->setHelp('The <info>' . self::COMMAND_NAME . '</info> returns the current environment name.')
+            ->setDefinition(
+                array(
+                    new InputArgument(
+                        self::DB_CONFIG_FILE_PATH_ARGUMENT_NAME,
+                        InputArgument::REQUIRED,
+                        'The path of the config file (e.g. ./config/default_db.php)'
+                    ),
+                )
+            )
+        ;
     }
 
     /**
@@ -60,6 +72,40 @@ class SetConfigurationCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $path = $input->getArgument(self::DB_CONFIG_FILE_PATH_ARGUMENT_NAME);
+        if (empty($path)) {
+            $output->writeln('The supplied config file path name cannot be null or empty.');
 
+            return;
+        }
+
+        $dbConfig = $this->getDbConfigArray($path);
+        if(empty($dbConfig))
+        {
+            throw new \InvalidArgumentException('The config file can not be empty.');
+        }
+
+        foreach($dbConfig as $scope => $scopeConfig) {
+            foreach($scopeConfig as $scopeId => $scopeIdConfig) {
+                foreach($scopeIdConfig as $path => $value) {
+                    $this->configResource->saveConfig(
+                        $path,
+                        $value,
+                        $scope,
+                        $scopeId
+                    );
+                }
+            }
+        }
+    }
+
+    protected function getDbConfigArray($path)
+    {
+        if(is_file($path))
+        {
+            return include $path;
+        }
+
+        return array();
     }
 }

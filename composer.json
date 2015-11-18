@@ -1,9 +1,9 @@
 {
-  "name": "euwishes/magento2-module-console-staging",
+  "name": "shockwavemk/magento2-module-console-staging",
   "description": "Magento2 Command-Line Tools For Staging Support",
   "type": "magento2-module",
   "require": {
-    "magento/magento-composer-installer": "*"
+    "magento/magento-composer-installer": "0.1.4"
   },
   "extra": {
         "map": [

@@ -4,7 +4,7 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="applyConfigurationCommand" xsi:type="object">Shockwavemk\Staging\Console\Configuration\SetConfigurationCommand</item>
+                <item name="SetConfigurationCommand" xsi:type="object">Shockwavemk\Staging\Console\Configuration\SetConfigurationCommand</item>
             </argument>
         </arguments>
     </type>
