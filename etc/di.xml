@@ -5,6 +5,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="SetConfigurationCommand" xsi:type="object">Shockwavemk\Staging\Console\Configuration\SetConfigurationCommand</item>
+                <item name="GetConfigurationCommand" xsi:type="object">Shockwavemk\Staging\Console\Configuration\GetConfigurationCommand</item>
             </argument>
         </arguments>
     </type>
