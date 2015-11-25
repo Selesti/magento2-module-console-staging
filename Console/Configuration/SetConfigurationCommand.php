@@ -39,8 +39,7 @@ class SetConfigurationCommand extends Command
             $params[StoreManager::PARAM_RUN_TYPE] = 'store';
             $objectManager = $objectManagerFactory->create($params);
 
-            /** @var \Magento\Config\Model\Resource\Config $test */
-            return $objectManager->get('Magento\Config\Model\Resource\Config');
+            return $objectManager->get('Shockwavemk\Staging\Console\Model\Resource\Config');
         }
         catch (\Exception $e) {
             return null;
