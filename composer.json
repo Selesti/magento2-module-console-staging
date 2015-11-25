@@ -3,24 +3,13 @@
   "description": "Magento2 Command-Line Tools For Staging Support",
   "type": "magento2-module",
   "require": {
-    "magento/magento-composer-installer": "0.1.4"
   },
-  "extra": {
-        "map": [
-            [
-                ".",
-                "Shockwavemk/Staging"
-            ]
-        ]
-  },
-  "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.magento.com/"
-        },
-        {
-            "type": "composer",
-            "url": "http://packages.firegento.com"
-        }
-    ]
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Shockwavemk\\Staging\\": ""
+    }
+  }
 }
