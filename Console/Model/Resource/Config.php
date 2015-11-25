@@ -13,7 +13,7 @@ namespace Shockwavemk\Staging\Console\Model\Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Config\Model\Resource\Config implements \Magento\Framework\App\Config\Resource\ConfigInterface
+class Config extends \Magento\Config\Model\ResourceModel\Config implements \Magento\Framework\App\Config\ConfigResource\ConfigInterface
 {
     /**
      * Delete config value
