@@ -25,9 +25,9 @@ class Config extends \Magento\Config\Model\ResourceModel\Config implements \Mage
      */
     public function getConfig($path, $scope, $scopeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'path = ?',
@@ -40,18 +40,18 @@ class Config extends \Magento\Config\Model\ResourceModel\Config implements \Mage
             $scopeId
         );
 
-        return $adapter->fetchRow($select);
+        return $connection->fetchRow($select);
     }
 
     public function fetchAll()
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         );
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
 
