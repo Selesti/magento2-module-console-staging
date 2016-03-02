@@ -14,58 +14,28 @@ That is the purpose of this module.
 
 Add the module to your composer file.
 
-´´´json
-    {
-      
-      ...
-      
-      "require": {
-        ...
-        
-        "shockwavemk/magento2-module-console-staging": "dev-master",
-        
-        ...
-      },
-      
-      ...
+```json
+{
+  "require": {    
+    "shockwavemk/magento2-module-console-staging": "dev-master"
+  }
+}
 
-´´´
-
-Decide if you want to use symlink-strategy
-
-´´´json
-    {
-      
-      ...
-      
-      "extra": {
-          "magento-root-dir": ".",
-          "magento-deploystrategy": "copy",
-          "magento-deploystrategy-overwrite": {
-            ...
-            
-            "shockwavemk/magento2-module-console-staging": "symlink"
-          },
-          "auto-append-gitignore": true
-        },
-      
-      ...
-
-´´´
+```
 
 Install the module with composer
 
-´´´bash
+```bash
 
     composer update
 
-´´´
+```
 
 On succeed, install the module via bin/magento console:
 
 ![](./files/module-status.png)
 
-´´´bash
+```bash
 
     bin/magento cache:clean
     
@@ -73,7 +43,7 @@ On succeed, install the module via bin/magento console:
     
     bin/magento setup:upgrade
 
-´´´
+```
 
 You should be able to see a new command in bin/magento console:
 
@@ -86,7 +56,7 @@ You should be able to see a new command in bin/magento console:
 
 Create a configuration php file in your project directory (or a subfolder or elsewhere on your server)
 
-´´´php
+```php
 
     <?php
     return array (
@@ -99,16 +69,27 @@ Create a configuration php file in your project directory (or a subfolder or els
             )
         );
         
-´´´
+```
 
 ## Execute command
 
-´´´bash
+### set
 
-    < project-path >/bin/magento staging:config:set ./config/magento/default_db.php
+```bash
+
+    < project-path >/bin/magento staging:config:set ./db-config.php
     
-´´´
+```
 
 ## Result in database
 
 ![](./files/result-in-database.png)
+
+
+# Save current db config to file (export)
+
+```bash
+
+    < project-path >/bin/magento staging:config:get ./db-config.php
+    
+```
